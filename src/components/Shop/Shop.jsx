@@ -14,11 +14,32 @@ const Shop = () => {
   }, []);
   useEffect(() => {
     const storedCart = getShoppingCart();
-    console.log(storedCart);
-  }, []);
+    const savedCart = [];
+    for (const id in storedCart) {
+      const addedProduct = products.find((product) => product.id === id);
+      if (addedProduct) {
+        const quantity = storedCart[id];
+        addedProduct.quantity = quantity;
+        savedCart.push(addedProduct);
+      }
+      // console.log("added Product", addedProduct);
+    }
+    setCart(savedCart);
+  }, [products]);
 
   const handleAddToCart = (product) => {
-    const newCart = [...cart, product];
+    let newCart = 0;
+    // const newCart = [...cart, product];
+    const exist = cart.find((pd) => pd.id === product.id);
+    if (!exist) {
+      product.quantity = 1;
+      newCart = [...cart, product];
+    } else {
+      exist.quantity = exist.quantity + 1;
+      const remaining = cart.filter((pd) => pd.id !== product.id);
+      newCart = [...remaining, exist];
+    }
+
     setCart(newCart);
     addToDb(product.id);
   };
