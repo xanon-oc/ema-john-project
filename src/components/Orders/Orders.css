@@ -1,3 +1,6 @@
 .review-container {
   margin: 50px auto;
 }
+.proceed-links {
+  text-decoration: none;
+}
