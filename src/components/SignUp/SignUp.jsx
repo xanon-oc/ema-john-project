@@ -1,32 +1,39 @@
 import React, { useContext, useState } from "react";
-import "./Login.css";
+import "./SignUp.css";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProvider";
-const Login = () => {
+const SignUp = () => {
   const [error, setError] = useState("");
-  const { signIn } = useContext(AuthContext);
+  const { createUser } = useContext(AuthContext);
 
-  const handleLogIn = (e) => {
-    setError("");
+  const handleSignUp = (e) => {
     e.preventDefault();
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
-    signIn(email, password)
+    const confirm = form.confirm.value;
+    console.log(email, password, confirm);
+    setError("");
+    if (password !== confirm) {
+      setError("Password not matched");
+      return;
+    } else if (password.length < 6) {
+      setError("password must be 6 characters");
+    }
+    createUser(email, password)
       .then((result) => {
         const loggedUser = result.user;
         console.log(loggedUser);
-        form.reset();
+        setError("");
       })
       .catch((error) => {
         setError(error.message);
       });
   };
-
   return (
     <div className="form-container">
-      <h3 className="form-title">Login</h3>
-      <form onSubmit={handleLogIn}>
+      <h3 className="form-title">Sign Up</h3>
+      <form onSubmit={handleSignUp}>
         <div className="form-control">
           <label htmlFor="email">Email</label>
           <input type="email" name="email" required />
@@ -35,14 +42,18 @@ const Login = () => {
           <label htmlFor="password">Password</label>
           <input type="password" name="password" required />
         </div>
+        <div className="form-control">
+          <label htmlFor="confirm">Confirm Password</label>
+          <input type="password" name="confirm" required />
+        </div>
         <p className="error-title">{error}</p>
-        <input className="btn-submit" type="submit" value="Login" />
+        <input className="btn-submit" type="submit" value="Sign Up" />
       </form>
       <p className="p-title">
         <small>
-          New to Ema-john?{" "}
-          <Link className="link-title" to="/signUp">
-            Create New Account?
+          Already have a account?
+          <Link className="link-title" to="/login">
+            Login
           </Link>
         </small>
       </p>
@@ -50,4 +61,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;

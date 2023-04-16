@@ -16,3 +16,14 @@ nav.header a {
 nav.header a:hover {
   color: orange;
 }
+.w-title {
+  color: white;
+  margin-right: 10px;
+}
+.logout {
+  margin: 10px;
+}
+.nav-bar {
+  display: flex;
+  align-items: center;
+}
